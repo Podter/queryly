@@ -15,9 +15,14 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.1.4",
+    "@radix-ui/react-slot": "^1.1.1",
     "astro": "^5.1.6",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.471.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^5.1.4",
@@ -36,6 +41,7 @@
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.19.1"
   }
