@@ -3,6 +3,7 @@ import { includeIgnoreFile } from "@eslint/compat";
 import eslint from "@eslint/js";
 import astroPlugin from "eslint-plugin-astro";
 import importPlugin from "eslint-plugin-import";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -20,9 +21,11 @@ export default tseslint.config(
     plugins: {
       import: importPlugin,
       "react-hooks": reactHooks,
+      "jsx-a11y": jsxA11y,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
@@ -59,6 +62,9 @@ export default tseslint.config(
       parserOptions: {
         parser: tseslint.parser,
         project: true,
+        ecmaFeatures: {
+          jsx: true,
+        },
       },
       globals: {
         ...globals.browser,
