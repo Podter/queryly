@@ -25,6 +25,8 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/node": "^9.0.1",
     "@astrojs/tailwind": "^5.1.4",
     "@eslint/compat": "^1.2.5",
     "@eslint/js": "^9.18.0",
