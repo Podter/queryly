@@ -11,9 +11,13 @@
     "preview": "astro preview",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "check": "astro check"
+    "check": "astro check",
+    "docker:up": "docker compose -f compose-dev.yml up -d",
+    "docker:down": "docker compose -f compose-dev.yml down",
+    "docker:rm": "docker compose -f compose-dev.yml down -v --remove-orphans"
   },
   "dependencies": {
+    "@astrojs/node": "^9.0.1",
     "@astrojs/react": "^4.1.4",
     "@radix-ui/react-slot": "^1.1.1",
     "astro": "^5.1.6",
@@ -26,7 +30,6 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
-    "@astrojs/node": "^9.0.1",
     "@astrojs/tailwind": "^5.1.4",
     "@eslint/compat": "^1.2.5",
     "@eslint/js": "^9.18.0",

@@ -2,7 +2,7 @@
 import node from "@astrojs/node";
 import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
-import { defineConfig } from "astro/config";
+import { defineConfig, envField } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,4 +17,14 @@ export default defineConfig({
     }),
     react(),
   ],
+  env: {
+    schema: {
+      SEARXNG_API: envField.string({
+        context: "server",
+        access: "secret",
+        url: true,
+      }),
+    },
+    validateSecrets: true,
+  },
 });

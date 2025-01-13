@@ -1,0 +1,32 @@
+services:
+  queryly:
+    build:
+      context: .
+    restart: unless-stopped
+    depends_on:
+      - searxng
+    volumes:
+      - ./data:/data:rw
+    env_file:
+      - .env
+    environment:
+      - SEARXNG_API=http://searxng:8080
+    ports:
+      - "4321:4321"
+
+  searxng:
+    image: searxng/searxng:latest
+    restart: unless-stopped
+    volumes:
+      - ./configs/searxng/settings.yml:/etc/searxng/settings.yml:ro
+    environment:
+      - UWSGI_WORKERS=2
+    labels:
+      - com.centurylinklabs.watchtower.scope=third_party
+
+  watchtower:
+    image: ghcr.io/containrrr/watchtower
+    restart: unless-stopped
+    command: --cleanup --scope third_party --interval 900 --include-restarting
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
