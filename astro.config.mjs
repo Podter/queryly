@@ -15,7 +15,11 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false,
     }),
-    react(),
+    react({
+      babel: {
+        plugins: ["babel-plugin-react-compiler"],
+      },
+    }),
   ],
   env: {
     schema: {

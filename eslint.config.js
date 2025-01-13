@@ -4,6 +4,7 @@ import eslint from "@eslint/js";
 import astroPlugin from "eslint-plugin-astro";
 import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
+import reactCompiler from "eslint-plugin-react-compiler";
 import reactHooks from "eslint-plugin-react-hooks";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -22,10 +23,12 @@ export default tseslint.config(
       import: importPlugin,
       "react-hooks": reactHooks,
       "jsx-a11y": jsxA11y,
+      "react-compiler": reactCompiler,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
       ...jsxA11y.configs.recommended.rules,
+      "react-compiler/react-compiler": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
