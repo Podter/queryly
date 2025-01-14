@@ -1,10 +1,21 @@
 ---
 import Layout from "~/layouts/layout.astro";
+import { searxng } from "~/lib/searxng";
 
-await new Promise((resolve) => setTimeout(resolve, 2000));
+const query = Astro.url.searchParams.get("q") ?? "";
+const res = await searxng.search(query);
 ---
 
 <Layout>
-  <h1>Search</h1>
-  <p>{Astro.url.searchParams.get("q")}</p>
+  <main class="flex flex-1 flex-col space-y-4">
+    <h1>Search</h1>
+    {
+      res.results.map((result) => (
+        <a href={result.url} class="max-w-screen-2xl">
+          <span>{result.title}</span>
+          <p>{result.content}</p>
+        </a>
+      ))
+    }
+  </main>
 </Layout>
