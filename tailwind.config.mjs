@@ -49,8 +49,7 @@ export default {
       },
       fontFamily: {
         sans: ["'Inter Variable'", ...fontFamily.sans],
-        mono: [...fontFamily.mono],
-        serif: [...fontFamily.serif],
+        heading: ["'Poppins'", ...fontFamily.sans],
       },
     },
   },
