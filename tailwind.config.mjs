@@ -48,7 +48,7 @@ export default {
         ring: "hsl(var(--ring))",
       },
       fontFamily: {
-        sans: [...fontFamily.sans],
+        sans: ["'Inter Variable'", ...fontFamily.sans],
         mono: [...fontFamily.mono],
         serif: [...fontFamily.serif],
       },
