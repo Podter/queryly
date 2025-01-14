@@ -8,13 +8,6 @@ export default {
   darkMode: ["class"],
   content: ["./src/**/*.{astro,js,jsx,ts,tsx}"],
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1536px",
-      },
-    },
     extend: {
       borderRadius: {
         lg: "var(--radius)",

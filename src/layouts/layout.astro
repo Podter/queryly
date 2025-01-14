@@ -6,6 +6,7 @@ import "~/styles/nprogress.css";
 
 import ClientScripts from "~/components/client-scripts.astro";
 import Footer from "~/components/footer.astro";
+import ThemeToggle from "~/components/theme-toggle.astro";
 ---
 
 <!doctype html>
@@ -19,6 +20,7 @@ import Footer from "~/components/footer.astro";
     <ClientScripts />
   </head>
   <body>
+    <ThemeToggle className="absolute right-3 top-3" />
     <slot />
     <Footer />
   </body>
