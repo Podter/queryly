@@ -2,18 +2,21 @@
 import "@fontsource-variable/inter";
 import "@fontsource/poppins/600.css";
 import "~/styles/globals.css";
+import "~/styles/nprogress.css";
 
+import ClientScripts from "~/components/client-scripts.astro";
 import Footer from "~/components/footer.astro";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" transition:name="root" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>Queryly</title>
+    <ClientScripts />
   </head>
   <body>
     <slot />
