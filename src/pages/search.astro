@@ -1,0 +1,8 @@
+---
+import Layout from "~/layouts/layout.astro";
+---
+
+<Layout>
+  <h1>Search</h1>
+  <p>{Astro.url.searchParams.get("q")}</p>
+</Layout>
