@@ -10,12 +10,12 @@ import Layout from "~/layouts/layout.astro";
       Queryly
     </h1>
     <form
-      class="bg-transparen flex h-10 w-full max-w-[40rem] rounded-xl border border-input shadow-sm"
+      class="flex h-10 w-full max-w-[40rem] rounded-xl border border-input bg-background shadow-sm"
       method="get"
       action="/search"
     >
       <input
-        class="w-full rounded-l-xl px-3 py-1 text-base md:text-sm"
+        class="w-full rounded-l-xl bg-background px-3 py-1 text-base placeholder:text-muted-foreground md:text-sm"
         type="search"
         name="q"
         placeholder="Search"
@@ -30,3 +30,9 @@ import Layout from "~/layouts/layout.astro";
     </form>
   </main>
 </Layout>
+
+<style>
+  body {
+    @apply bg-grid-small-[#E5E5E5] dark:bg-grid-small-[#262626];
+  }
+</style>
