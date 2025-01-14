@@ -2,6 +2,8 @@
 import "@fontsource-variable/inter";
 import "@fontsource/poppins/600.css";
 import "~/styles/globals.css";
+
+import Footer from "~/components/footer.astro";
 ---
 
 <!doctype html>
@@ -11,9 +13,10 @@ import "~/styles/globals.css";
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>Astro Basics</title>
+    <title>Queryly</title>
   </head>
   <body>
     <slot />
+    <Footer />
   </body>
 </html>

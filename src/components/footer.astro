@@ -1,0 +1,26 @@
+---
+import { Heart } from "lucide-react";
+
+import GitHub from "./icons/github";
+---
+
+<footer class="flex w-full px-6">
+  <div
+    class="flex w-full flex-col-reverse items-center justify-between space-y-1 py-[14px] sm:flex-row"
+  >
+    <a
+      class="flex items-center space-x-1.5 text-sm text-muted-foreground transition-opacity hover:opacity-80"
+      href="https://podter.me"
+    >
+      <Heart size={12} />
+      <span>Made by Podter</span>
+    </a>
+    <a
+      class="flex items-center space-x-1.5 text-sm text-muted-foreground transition-opacity hover:opacity-80"
+      href="https://github.com/Podter/queryly"
+    >
+      <GitHub className="inline" size={12} />
+      <span>Source</span>
+    </a>
+  </div>
+</footer>
