@@ -6,8 +6,6 @@ services:
     depends_on:
       - searxng
       - redis
-    volumes:
-      - ./data:/data:rw
     env_file:
       - .env
     environment:
