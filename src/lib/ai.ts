@@ -36,6 +36,7 @@ export const cacheMiddleware = (
       return {
         stream: simulateReadableStream({
           chunks: formattedChunks,
+          chunkDelayInMs: 3,
         }),
         rawCall: { rawPrompt: null, rawSettings: {} },
       };

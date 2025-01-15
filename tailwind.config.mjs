@@ -1,3 +1,4 @@
+import typography from "@tailwindcss/typography";
 import svgToDataUri from "mini-svg-data-uri";
 import animate from "tailwindcss-animate";
 import { fontFamily } from "tailwindcss/defaultTheme";
@@ -55,7 +56,7 @@ export default {
       },
     },
   },
-  plugins: [animate, backgroundGrid],
+  plugins: [animate, typography, backgroundGrid],
 };
 
 function backgroundGrid({ matchUtilities, theme }) {
