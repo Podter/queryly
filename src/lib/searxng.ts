@@ -1,5 +1,8 @@
 import { SEARXNG_API } from "astro:env/server";
+import { objectHash } from "ohash";
 import { SearxngService } from "searxng";
+
+import { cache } from "./cache";
 
 export const searxng = new SearxngService({
   baseURL: SEARXNG_API,
@@ -9,3 +12,11 @@ export const searxng = new SearxngService({
     autocomplete: "google",
   },
 });
+
+export const search = cache(
+  async (...args: Parameters<typeof searxng.search>) => {
+    return await searxng.search(...args);
+  },
+  (...args) => objectHash(args),
+  300, // 5 minutes
+);

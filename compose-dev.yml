@@ -8,3 +8,14 @@ services:
       - UWSGI_WORKERS=2
     volumes:
       - ./configs/searxng/settings.yml:/etc/searxng/settings.yml:ro
+
+  redis:
+    image: valkey/valkey:8-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+volumes:
+  redis-data:

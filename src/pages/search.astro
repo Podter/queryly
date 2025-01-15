@@ -1,10 +1,10 @@
 ---
 import SearchInput from "~/components/search-input.astro";
 import Layout from "~/layouts/layout.astro";
-import { searxng } from "~/lib/searxng";
+import { search } from "~/lib/searxng";
 
 const query = Astro.url.searchParams.get("q") ?? "";
-const res = await searxng.search(query);
+const res = await search(query);
 ---
 
 <Layout>
