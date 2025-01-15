@@ -104,7 +104,7 @@ const end = performance.now();
                           variant: "outline",
                           className:
                             "justify-between rounded-md px-3 py-3 font-normal",
-                        }),
+                        })
                       )}
                     >
                       {suggestion}
@@ -131,37 +131,35 @@ const end = performance.now();
                   <CardTitle>{infobox}</CardTitle>
                   {img_src && <img src={img_src} alt={infobox} />}
                 </CardHeader>
-                <CardContent className="space-y-3 text-sm">
+                <CardContent className="prose prose-sm prose-neutral dark:prose-invert">
                   <p>{content}</p>
                   {attributes && attributes.length > 0 && (
-                    <ul class="space-y-1">
+                    <ul>
                       {attributes.map(({ label, value }) => (
                         <li>
-                          <span class="font-bold">{label}</span>: {value}
+                          <strong>{label}</strong>: {value}
                         </li>
                       ))}
                     </ul>
                   )}
                   {urls && urls.length > 0 && (
-                    <div class="flex flex-col space-y-1">
-                      <span class="font-bold">Links</span>
-                      <ul class="ml-6 list-disc space-y-1">
+                      <p><strong>Links</strong></p>
+                      <ul>
                         {urls.map(({ title, url }) => (
                           <li>
                             <a
                               href={url}
-                              class="text-blue-600 underline-offset-4 visited:text-purple-600 hover:underline dark:text-blue-300 dark:visited:text-purple-300"
+                              class="text-blue-600 no-underline underline-offset-4 visited:text-purple-600 hover:underline dark:text-blue-300 dark:visited:text-purple-300"
                             >
                               {title}
                             </a>
                           </li>
                         ))}
                       </ul>
-                    </div>
                   )}
                 </CardContent>
               </Card>
-            ),
+            )
           )}
         </div>
       )
