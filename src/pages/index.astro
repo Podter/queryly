@@ -1,11 +1,13 @@
 ---
 import SearchInput from "~/components/search-input.astro";
+import ThemeToggle from "~/components/theme-toggle.astro";
 import Layout from "~/layouts/layout.astro";
 
 export const prerender = true;
 ---
 
 <Layout>
+  <ThemeToggle className="absolute right-3 top-3" />
   <main class="flex flex-1 flex-col items-center justify-center">
     <h1 class="mb-12 font-heading text-7xl font-semibold tracking-[-3%]">
       Queryly
