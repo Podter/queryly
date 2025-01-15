@@ -38,9 +38,9 @@ After your analysis, provide your final summary in the following format:
 [Your summary here, following the structure and guidelines provided above]
 
 Citations:
-[First source URL]
-[Second source URL]
-[Third source URL]
+[First source title](First source URL)
+[Second source title](Second source URL)
+[Third source title](Third source URL)
 
 </summary>
 
