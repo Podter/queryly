@@ -1,7 +1,6 @@
 use_default_settings: true
 
 server:
-  secret_key: "df05080832bb682c8048a4cbec7651e7998511ae54145427bc6276ecbc88a778"
   limiter: false
   image_proxy: true
   port: 8080

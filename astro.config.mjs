@@ -23,6 +23,10 @@ export default defineConfig({
   ],
   env: {
     schema: {
+      SECRET: envField.string({
+        context: "server",
+        access: "secret",
+      }),
       SEARXNG_API: envField.string({
         context: "server",
         access: "secret",

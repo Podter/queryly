@@ -5,13 +5,13 @@ import SearchInput from "~/components/search-input.astro";
 import { buttonVariants } from "~/components/ui/button";
 import { Separator } from "~/components/ui/separator";
 import Layout from "~/layouts/layout.astro";
-import { search } from "~/lib/searxng";
+import { getFaviconUrl, search } from "~/lib/searxng";
 import { cn } from "~/lib/utils";
 
 const start = performance.now();
 
 const query = Astro.url.searchParams.get("q") ?? "";
-const res = await search(query);
+const { results, suggestions } = await search(query);
 
 const end = performance.now();
 ---
@@ -35,26 +35,31 @@ const end = performance.now();
   <main class="flex flex-1 py-8 pl-40">
     <div class="flex max-w-screen-sm flex-col space-y-6 break-words">
       {
-        res.results.map((result) => (
+        results.map((result) => (
           <article class="flex flex-col space-y-1">
-            <a href={result.url} class="text-xs text-muted-foreground">
-              {result.url}
-            </a>
-            <a href={result.url} class="text-lg font-medium">
-              {result.title}
+            <a href={result.url} class="flex flex-col space-y-1">
+              <div class="flex items-center space-x-2">
+                <img
+                  src={getFaviconUrl(new URL(result.url).hostname)}
+                  alt=""
+                  class="h-4 w-4 rounded-sm"
+                />
+                <span class="text-xs text-muted-foreground">{result.url}</span>
+              </div>
+              <h3 class="text-lg font-medium">{result.title}</h3>
             </a>
             <p class="text-sm">{result.content}</p>
           </article>
         ))
       }
       {
-        res.suggestions.length > 0 && (
+        suggestions.length > 0 && (
           <>
             <Separator />
             <div class="flex flex-col space-y-3">
               <span class="text-lg font-medium">Suggestions</span>
               <div class="grid grid-cols-2 gap-2">
-                {res.suggestions.map((suggestion) => {
+                {suggestions.map((suggestion) => {
                   const params = Astro.url.searchParams;
                   params.set("q", suggestion);
                   const url = `/search?${params.toString()}`;

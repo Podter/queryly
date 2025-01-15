@@ -1,4 +1,5 @@
-import { SEARXNG_API } from "astro:env/server";
+import crypto from "node:crypto";
+import { SEARXNG_API, SECRET } from "astro:env/server";
 import { objectHash } from "ohash";
 import { SearxngService } from "searxng";
 
@@ -20,3 +21,16 @@ export const search = cache(
   (...args) => `search:${objectHash(args)}`,
   3600, // 1 hour
 );
+
+export function getFaviconUrl(authority: string) {
+  const hash = crypto
+    .createHmac("sha256", SECRET as crypto.BinaryLike)
+    .update(authority)
+    .digest("hex");
+
+  const params = new URLSearchParams();
+  params.append("a", authority);
+  params.append("h", hash);
+
+  return `/api/favicon?${params.toString()}`;
+}

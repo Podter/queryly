@@ -20,8 +20,11 @@ services:
     restart: unless-stopped
     volumes:
       - ./configs/searxng/settings.yml:/etc/searxng/settings.yml:ro
+    env_file:
+      - .env
     environment:
       - UWSGI_WORKERS=2
+      - SEARXNG_SECRET=${SECRET}
     labels:
       - com.centurylinklabs.watchtower.scope=third_party
 
