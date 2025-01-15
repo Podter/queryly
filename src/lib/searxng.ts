@@ -17,6 +17,6 @@ export const search = cache(
   async (...args: Parameters<typeof searxng.search>) => {
     return await searxng.search(...args);
   },
-  (...args) => objectHash(args),
+  (...args) => `search:${objectHash(args)}`,
   3600, // 1 hour
 );
