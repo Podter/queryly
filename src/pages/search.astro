@@ -53,37 +53,46 @@ const end = performance.now();
     <div class="flex max-w-screen-sm flex-col space-y-6">
       {pageNum === 1 && <AIOverviews {query} client:load />}
       {
-        results.map((result) => (
-          <article class="flex flex-col space-y-1">
-            <a
-              href={result.url}
-              rel="noreferrer"
-              class="flex flex-col space-y-1 text-blue-600 visited:text-purple-600 dark:text-blue-300 dark:visited:text-purple-300"
-            >
-              <div class="group flex items-center space-x-2">
-                <img
-                  src={getFaviconUrl(new URL(result.url).hostname)}
-                  alt=""
-                  class="h-4 w-4 rounded-sm"
+        results.map((result) => {
+          const re = new RegExp(query, "gi");
+          const content = result.content?.replace(re, `<strong>$&</strong>`);
+          return (
+            <article class="flex flex-col space-y-1">
+              <a
+                href={result.url}
+                rel="noreferrer"
+                class="flex flex-col space-y-1 text-blue-600 visited:text-purple-600 dark:text-blue-300 dark:visited:text-purple-300"
+              >
+                <div class="group flex items-center space-x-2">
+                  <img
+                    src={getFaviconUrl(new URL(result.url).hostname)}
+                    alt=""
+                    class="h-4 w-4 rounded-sm"
+                  />
+                  <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
+                    {result.url}
+                  </span>
+                </div>
+                <h3 class="text-lg font-medium underline-offset-4 hover:underline">
+                  {result.title}
+                </h3>
+              </a>
+              <div class="flex space-x-2">
+                {result.thumbnail && (
+                  <img
+                    src={result.thumbnail}
+                    alt={result.title}
+                    class="h-full"
+                  />
+                )}
+                <p
+                  class="max-w-screen-sm break-words text-sm text-neutral-700 dark:text-neutral-300"
+                  set:html={content}
                 />
-                <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
-                  {result.url}
-                </span>
               </div>
-              <h3 class="text-lg font-medium underline-offset-4 hover:underline">
-                {result.title}
-              </h3>
-            </a>
-            <div class="flex space-x-2">
-              {result.thumbnail && (
-                <img src={result.thumbnail} alt={result.title} class="h-full" />
-              )}
-              <p class="max-w-screen-sm break-words text-sm">
-                {result.content}
-              </p>
-            </div>
-          </article>
-        ))
+            </article>
+          );
+        })
       }
       {
         suggestions.length > 0 && (
@@ -143,7 +152,10 @@ const end = performance.now();
                     </ul>
                   )}
                   {urls && urls.length > 0 && (
-                      <p><strong>Links</strong></p>
+                    <>
+                      <p>
+                        <strong>Links</strong>
+                      </p>
                       <ul>
                         {urls.map(({ title, url }) => (
                           <li>
@@ -156,6 +168,7 @@ const end = performance.now();
                           </li>
                         ))}
                       </ul>
+                    </>
                   )}
                 </CardContent>
               </Card>

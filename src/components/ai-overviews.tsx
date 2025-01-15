@@ -32,7 +32,7 @@ export default function AIOverviews({ query }: AIOverviewsProps) {
       </CardHeader>
       <CardContent
         className={cn(
-          "prose prose-neutral prose-sm dark:prose-invert max-w-none",
+          "prose prose-sm prose-neutral max-w-none dark:prose-invert",
           !open && "h-64",
         )}
       >
