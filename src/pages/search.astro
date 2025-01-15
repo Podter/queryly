@@ -129,7 +129,7 @@ const end = performance.now();
               <Card>
                 <CardHeader className="space-y-4">
                   <CardTitle>{infobox}</CardTitle>
-                  <img src={img_src} alt={infobox} />
+                  {img_src && <img src={img_src} alt={infobox} />}
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm">
                   <p>{content}</p>
