@@ -3,6 +3,14 @@ import { SearchIcon } from "lucide-react";
 
 import SearchInput from "~/components/search-input.astro";
 import { buttonVariants } from "~/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import Layout from "~/layouts/layout.astro";
 import { getFaviconUrl, search } from "~/lib/searxng";
@@ -11,7 +19,19 @@ import { cn } from "~/lib/utils";
 const start = performance.now();
 
 const query = Astro.url.searchParams.get("q") ?? "";
-const { results, suggestions } = await search(query);
+const { results, suggestions, infoboxes } = await search(query);
+
+type Infobox = Awaited<ReturnType<typeof search>>["infoboxes"][number] & {
+  img_src?: string;
+  attributes?: {
+    label: string;
+    value: string;
+  }[];
+  urls?: {
+    title: string;
+    url: string;
+  }[];
+};
 
 const end = performance.now();
 ---
@@ -32,7 +52,7 @@ const end = performance.now();
       </nav>
     </div>
   </header>
-  <main class="flex flex-1 py-8 pl-40">
+  <main class="flex flex-1 space-x-8 py-8 pl-40 pr-8">
     <div class="flex max-w-screen-sm flex-col space-y-6">
       {
         results.map((result) => (
@@ -82,7 +102,7 @@ const end = performance.now();
                           variant: "outline",
                           className:
                             "justify-between rounded-md px-3 py-3 font-normal",
-                        }),
+                        })
                       )}
                     >
                       {suggestion}
@@ -99,9 +119,46 @@ const end = performance.now();
         Took {Math.round(end - start)}ms to fetch results
       </p>
     </div>
-    <div>
-      <!-- Infobox -->
-    </div>
+    {
+      infoboxes.length > 0 && (
+        <div class="flex max-w-96 flex-col space-y-6">
+          {infoboxes.map(
+            ({ infobox, content, img_src, attributes, urls }: Infobox) => (
+              <Card>
+                <CardHeader className="space-y-4">
+                  <CardTitle>{infobox}</CardTitle>
+                  <img src={img_src} alt={infobox} />
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm">
+                  <p>{content}</p>
+                  {attributes && attributes.length > 0 && (
+                    <ul class="space-y-1">
+                      {attributes.map(({ label, value }) => (
+                        <li>
+                          <span class="font-bold">{label}</span>: {value}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {urls && urls.length > 0 && (
+                    <div class="flex flex-col space-y-1">
+                      <span class="font-bold">Links</span>
+                      <ul class="ml-6 list-disc space-y-1">
+                        {urls.map(({ title, url }) => (
+                          <li>
+                            <a href={url}>{title}</a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )
+          )}
+        </div>
+      )
+    }
   </main>
   <Separator />
 </Layout>
