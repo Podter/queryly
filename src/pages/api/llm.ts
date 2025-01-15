@@ -7,14 +7,14 @@ import {
 import { cacheMiddleware, groq } from "~/lib/ai";
 import { omitResult, search } from "~/lib/searxng";
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, clientAddress }) => {
   const { prompt } = (await request.json()) as { prompt: string };
   const searchResult = omitResult(await search(prompt, { pageno: 1 }));
 
   const result = streamText({
     model: wrapLanguageModel({
       model: groq("llama-3.1-8b-instant"),
-      middleware: cacheMiddleware,
+      middleware: cacheMiddleware(clientAddress),
     }),
     system:
       "You are a helpful assistant. You need to summarize the search results.",

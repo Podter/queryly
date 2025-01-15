@@ -24,6 +24,7 @@
     "@fontsource/poppins": "^5.1.1",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
+    "@upstash/ratelimit": "^2.0.5",
     "ai": "^4.0.36",
     "astro": "^5.1.6",
     "class-variance-authority": "^0.7.1",

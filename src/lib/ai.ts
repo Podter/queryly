@@ -8,13 +8,15 @@ import { simulateReadableStream } from "ai";
 import { GROQ_API_KEY } from "astro:env/server";
 import { objectHash } from "ohash";
 
-import { redis } from "./redis";
+import { limiter, redis } from "./redis";
 
 export const groq = createGroq({
   apiKey: GROQ_API_KEY,
 });
 
-export const cacheMiddleware: LanguageModelV1Middleware = {
+export const cacheMiddleware = (
+  clientAddress: string,
+): LanguageModelV1Middleware => ({
   wrapStream: async ({ doStream, params }) => {
     const cacheKey = `ai:${objectHash(params)}`;
 
@@ -33,7 +35,6 @@ export const cacheMiddleware: LanguageModelV1Middleware = {
       });
       return {
         stream: simulateReadableStream({
-          initialDelayInMs: 5000,
           chunks: formattedChunks,
         }),
         rawCall: { rawPrompt: null, rawSettings: {} },
@@ -41,6 +42,11 @@ export const cacheMiddleware: LanguageModelV1Middleware = {
     }
 
     // If not cached, proceed with streaming
+    const { success } = await limiter.limit(clientAddress);
+    if (!success) {
+      throw new Error("Rate limit exceeded");
+    }
+
     const { stream, ...rest } = await doStream();
 
     const fullResponse: LanguageModelV1StreamPart[] = [];
@@ -65,4 +71,4 @@ export const cacheMiddleware: LanguageModelV1Middleware = {
       ...rest,
     };
   },
-};
+});
