@@ -1,0 +1,54 @@
+---
+import { ChevronUp } from "lucide-react";
+
+import { cn } from "~/lib/utils";
+import { Button } from "./ui/button";
+
+interface Props {
+  className?: string;
+}
+
+const { className } = Astro.props;
+---
+
+<scroll-to-top>
+  <Button
+    className={cn(
+      "transition-opacity data-[show=0]:opacity-0 data-[show=1]:opacity-100",
+      className
+    )}
+    variant="outline"
+    size="icon"
+    data-show="0"
+  >
+    <ChevronUp />
+  </Button>
+</scroll-to-top>
+
+<script>
+  class ScrollToTop extends HTMLElement {
+    button!: HTMLButtonElement;
+
+    connectedCallback() {
+      const button = this.querySelector("button");
+      if (button) {
+        this.button = button;
+      }
+
+      this.button.addEventListener("click", this.scrollToTop.bind(this));
+
+      this.handleScroll();
+      window.addEventListener("scroll", this.handleScroll.bind(this));
+    }
+
+    scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    handleScroll() {
+      this.button.dataset.show = window.scrollY > 100 ? "1" : "0";
+    }
+  }
+
+  customElements.define("scroll-to-top", ScrollToTop);
+</script>

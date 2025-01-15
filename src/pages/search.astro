@@ -2,6 +2,7 @@
 import { SearchIcon } from "lucide-react";
 
 import AIOverviews from "~/components/ai-overviews";
+import ScrollToTop from "~/components/scroll-to-top.astro";
 import SearchInput from "~/components/search-input.astro";
 import ThemeToggle from "~/components/theme-toggle.astro";
 import { buttonVariants } from "~/components/ui/button";
@@ -53,153 +54,158 @@ const end = performance.now();
       </nav>
     </div>
   </header>
-  <main class="flex flex-1 space-x-8 py-8 pl-40 pr-8">
-    <div class="flex max-w-screen-sm flex-col space-y-6">
-      {pageNum === 1 && <AIOverviews {query} client:load />}
-      {
-        results.map((result) => {
-          const re = new RegExp(query, "gi");
-          const content = result.content?.replace(re, `<strong>$&</strong>`);
-          return (
-            <article class="flex flex-col space-y-1">
-              <a
-                href={result.url}
-                rel="noreferrer"
-                class="flex flex-col space-y-1 text-blue-600 visited:text-purple-600 dark:text-blue-300 dark:visited:text-purple-300"
-              >
-                <div class="group flex items-center space-x-2">
-                  <img
-                    src={getFaviconUrl(new URL(result.url).hostname)}
-                    alt=""
-                    class="h-4 w-4 rounded-sm"
-                  />
-                  <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
-                    {result.url}
-                  </span>
-                </div>
-                <h3 class="text-lg font-medium underline-offset-4 hover:underline">
-                  {result.title}
-                </h3>
-              </a>
-              <div class="flex space-x-2">
-                {result.thumbnail && (
-                  <img
-                    src={result.thumbnail}
-                    alt={result.title}
-                    class="h-full"
-                  />
-                )}
-                <p
-                  class="max-w-screen-sm break-words text-sm text-neutral-700 dark:text-neutral-300"
-                  set:html={content}
-                />
-              </div>
-              <div class="flex flex-row-reverse justify-between text-xs text-muted-foreground">
-                <div class="flex gap-2">
-                  {result.engines.map((engine) => (
-                    <span>{engine}</span>
-                  ))}
-                </div>
-                {result.publishedDate && (
-                  <time datetime={result.publishedDate.toString()}>
-                    {new Date(result.publishedDate).toLocaleDateString(
-                      undefined,
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      }
-                    )}
-                  </time>
-                )}
-              </div>
-            </article>
-          );
-        })
-      }
-      {
-        suggestions.length > 0 && (
-          <>
-            <Separator />
-            <div class="flex flex-col space-y-3">
-              <span class="text-lg font-medium">Suggestions</span>
-              <div class="grid grid-cols-2 gap-2">
-                {suggestions.map((suggestion) => {
-                  const params = Astro.url.searchParams;
-                  params.set("q", suggestion);
-                  const url = `/search?${params.toString()}`;
-                  return (
-                    <a
-                      href={url}
-                      class={cn(
-                        buttonVariants({
-                          variant: "outline",
-                          className:
-                            "justify-between rounded-md px-3 py-3 font-normal",
-                        })
-                      )}
-                    >
-                      {suggestion}
-                      <SearchIcon className="text-muted-foreground" />
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-          </>
-        )
-      }
-      <p class="text-xs text-muted-foreground">
-        Took {Math.round(end - start)}ms to fetch results
-      </p>
-    </div>
-    {
-      infoboxes.length > 0 && (
-        <div class="flex max-w-96 flex-col space-y-6">
-          {infoboxes.map(
-            ({ infobox, content, img_src, attributes, urls }: Infobox) => (
-              <Card>
-                <CardHeader className="space-y-4">
-                  <CardTitle>{infobox}</CardTitle>
-                  {img_src && <img src={img_src} alt={infobox} />}
-                </CardHeader>
-                <CardContent className="prose prose-sm prose-neutral dark:prose-invert">
-                  <p>{content}</p>
-                  {attributes && attributes.length > 0 && (
-                    <ul>
-                      {attributes.map(({ label, value }) => (
-                        <li>
-                          <strong>{label}</strong>: {value}
-                        </li>
-                      ))}
-                    </ul>
+  <main class="flex flex-1 justify-between space-x-8 py-8 pl-40 pr-8">
+    <div class="flex space-x-8">
+      <div class="flex max-w-screen-sm flex-col space-y-6">
+        {pageNum === 1 && <AIOverviews {query} client:load />}
+        {
+          results.map((result) => {
+            const re = new RegExp(query, "gi");
+            const content = result.content?.replace(re, `<strong>$&</strong>`);
+            return (
+              <article class="flex flex-col space-y-1">
+                <a
+                  href={result.url}
+                  rel="noreferrer"
+                  class="flex flex-col space-y-1 text-blue-600 visited:text-purple-600 dark:text-blue-300 dark:visited:text-purple-300"
+                >
+                  <div class="group flex items-center space-x-2">
+                    <img
+                      src={getFaviconUrl(new URL(result.url).hostname)}
+                      alt=""
+                      class="h-4 w-4 rounded-sm"
+                    />
+                    <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
+                      {result.url}
+                    </span>
+                  </div>
+                  <h3 class="text-lg font-medium underline-offset-4 hover:underline">
+                    {result.title}
+                  </h3>
+                </a>
+                <div class="flex space-x-2">
+                  {result.thumbnail && (
+                    <img
+                      src={result.thumbnail}
+                      alt={result.title}
+                      class="h-full"
+                    />
                   )}
-                  {urls && urls.length > 0 && (
-                    <>
-                      <p>
-                        <strong>Links</strong>
-                      </p>
+                  <p
+                    class="max-w-screen-sm break-words text-sm text-neutral-700 dark:text-neutral-300"
+                    set:html={content}
+                  />
+                </div>
+                <div class="flex flex-row-reverse justify-between text-xs text-muted-foreground">
+                  <div class="flex gap-2">
+                    {result.engines.map((engine) => (
+                      <span>{engine}</span>
+                    ))}
+                  </div>
+                  {result.publishedDate && (
+                    <time datetime={result.publishedDate.toString()}>
+                      {new Date(result.publishedDate).toLocaleDateString(
+                        undefined,
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        }
+                      )}
+                    </time>
+                  )}
+                </div>
+              </article>
+            );
+          })
+        }
+        {
+          suggestions.length > 0 && (
+            <>
+              <Separator />
+              <div class="flex flex-col space-y-3">
+                <span class="text-lg font-medium">Suggestions</span>
+                <div class="grid grid-cols-2 gap-2">
+                  {suggestions.map((suggestion) => {
+                    const params = Astro.url.searchParams;
+                    params.set("q", suggestion);
+                    const url = `/search?${params.toString()}`;
+                    return (
+                      <a
+                        href={url}
+                        class={cn(
+                          buttonVariants({
+                            variant: "outline",
+                            className:
+                              "justify-between rounded-md px-3 py-3 font-normal",
+                          })
+                        )}
+                      >
+                        {suggestion}
+                        <SearchIcon className="text-muted-foreground" />
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          )
+        }
+        <p class="text-xs text-muted-foreground">
+          Took {Math.round(end - start)}ms to fetch results
+        </p>
+      </div>
+      {
+        infoboxes.length > 0 && (
+          <div class="flex max-w-96 flex-col space-y-6">
+            {infoboxes.map(
+              ({ infobox, content, img_src, attributes, urls }: Infobox) => (
+                <Card>
+                  <CardHeader className="space-y-4">
+                    <CardTitle>{infobox}</CardTitle>
+                    {img_src && <img src={img_src} alt={infobox} />}
+                  </CardHeader>
+                  <CardContent className="prose prose-sm prose-neutral dark:prose-invert">
+                    <p>{content}</p>
+                    {attributes && attributes.length > 0 && (
                       <ul>
-                        {urls.map(({ title, url }) => (
+                        {attributes.map(({ label, value }) => (
                           <li>
-                            <a
-                              href={url}
-                              class="text-blue-600 no-underline underline-offset-4 visited:text-purple-600 hover:underline dark:text-blue-300 dark:visited:text-purple-300"
-                            >
-                              {title}
-                            </a>
+                            <strong>{label}</strong>: {value}
                           </li>
                         ))}
                       </ul>
-                    </>
-                  )}
-                </CardContent>
-              </Card>
-            )
-          )}
-        </div>
-      )
-    }
+                    )}
+                    {urls && urls.length > 0 && (
+                      <>
+                        <p>
+                          <strong>Links</strong>
+                        </p>
+                        <ul>
+                          {urls.map(({ title, url }) => (
+                            <li>
+                              <a
+                                href={url}
+                                class="text-blue-600 no-underline underline-offset-4 visited:text-purple-600 hover:underline dark:text-blue-300 dark:visited:text-purple-300"
+                              >
+                                {title}
+                              </a>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
+                  </CardContent>
+                </Card>
+              )
+            )}
+          </div>
+        )
+      }
+    </div>
+    <div class="relative flex">
+      <ScrollToTop className="sticky top-[calc(100vh-2.5rem-2rem)]" />
+    </div>
   </main>
   <Separator />
 </Layout>
