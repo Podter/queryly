@@ -5,13 +5,14 @@ services:
     restart: unless-stopped
     depends_on:
       - searxng
+      - redis
     volumes:
       - ./data:/data:rw
     env_file:
       - .env
     environment:
       - SEARXNG_API=http://searxng:8080
-      - REDIS_URL=redis://localhost:6379/0
+      - REDIS_URL=redis://redis:6379/0
     ports:
       - "4321:4321"
 
@@ -34,7 +35,7 @@ services:
     volumes:
       - redis-data:/data
     environment:
-      - VALKEY_EXTRA_FLAGS="--save 60 1 --loglevel warning"
+      - VALKEY_EXTRA_FLAGS=--save 60 1 --loglevel warning
     labels:
       - com.centurylinklabs.watchtower.scope=third_party
 
