@@ -37,7 +37,11 @@ const end = performance.now();
       {
         results.map((result) => (
           <article class="flex flex-col space-y-1">
-            <a href={result.url} class="flex flex-col space-y-1">
+            <a
+              href={result.url}
+              rel="noreferrer"
+              class="flex flex-col space-y-1"
+            >
               <div class="flex items-center space-x-2">
                 <img
                   src={getFaviconUrl(new URL(result.url).hostname)}
