@@ -5,7 +5,7 @@ RUN --mount=type=cache,target=/root/.npm \
     npm install -g bun@latest
 
 # Dependencies
-FROM base as deps
+FROM base AS deps
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=bun.lockb,target=bun.lockb \
     --mount=type=cache,target=/root/.bun/install/cache \
