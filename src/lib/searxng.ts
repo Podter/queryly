@@ -18,5 +18,5 @@ export const search = cache(
     return await searxng.search(...args);
   },
   (...args) => objectHash(args),
-  300, // 5 minutes
+  3600, // 1 hour
 );
