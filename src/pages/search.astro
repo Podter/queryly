@@ -33,7 +33,7 @@ const end = performance.now();
     </div>
   </header>
   <main class="flex flex-1 py-8 pl-40">
-    <div class="flex max-w-screen-sm flex-col space-y-6 break-words">
+    <div class="flex max-w-screen-sm flex-col space-y-6">
       {
         results.map((result) => (
           <article class="flex flex-col space-y-1">
@@ -52,7 +52,14 @@ const end = performance.now();
               </div>
               <h3 class="text-lg font-medium">{result.title}</h3>
             </a>
-            <p class="text-sm">{result.content}</p>
+            <div class="flex space-x-2">
+              {result.thumbnail && (
+                <img src={result.thumbnail} alt={result.title} class="h-full" />
+              )}
+              <p class="max-w-screen-sm break-words text-sm">
+                {result.content}
+              </p>
+            </div>
           </article>
         ))
       }
