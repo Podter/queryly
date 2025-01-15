@@ -4,6 +4,7 @@ import { objectHash } from "ohash";
 import { SearxngService } from "searxng";
 
 import { cache } from "./cache";
+import { pick } from "./object-utils";
 
 export const searxng = new SearxngService({
   baseURL: SEARXNG_API,
@@ -33,4 +34,32 @@ export function getFaviconUrl(authority: string) {
   params.append("h", hash);
 
   return `/api/favicon?${params.toString()}`;
+}
+
+export function omitResult(data: Awaited<ReturnType<typeof search>>) {
+  const results = data.results.map((result) =>
+    pick(
+      result,
+      "url",
+      "title",
+      "content",
+      "engine",
+      "publishedDate",
+      "score",
+      "category",
+      "metadata",
+      "source",
+    ),
+  );
+  return {
+    ...pick(
+      data,
+      "query",
+      "answers",
+      "corrections",
+      "infoboxes",
+      "suggestions",
+    ),
+    results,
+  };
 }

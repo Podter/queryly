@@ -37,6 +37,10 @@ export default defineConfig({
         access: "secret",
         url: true,
       }),
+      GROQ_API_KEY: envField.string({
+        context: "server",
+        access: "secret",
+      }),
     },
     validateSecrets: true,
   },

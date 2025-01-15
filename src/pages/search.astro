@@ -1,6 +1,7 @@
 ---
 import { SearchIcon } from "lucide-react";
 
+import AIOverviews from "~/components/ai-overviews";
 import SearchInput from "~/components/search-input.astro";
 import { buttonVariants } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -12,7 +13,10 @@ import { cn } from "~/lib/utils";
 const start = performance.now();
 
 const query = Astro.url.searchParams.get("q") ?? "";
-const { results, suggestions, infoboxes } = await search(query);
+const pageNum = Number(Astro.url.searchParams.get("p") ?? "1");
+const { results, suggestions, infoboxes } = await search(query, {
+  pageno: pageNum,
+});
 
 type Infobox = Awaited<ReturnType<typeof search>>["infoboxes"][number] & {
   img_src?: string;
@@ -47,6 +51,7 @@ const end = performance.now();
   </header>
   <main class="flex flex-1 space-x-8 py-8 pl-40 pr-8">
     <div class="flex max-w-screen-sm flex-col space-y-6">
+      {pageNum === 1 && <AIOverviews {query} client:load />}
       {
         results.map((result) => (
           <article class="flex flex-col space-y-1">
