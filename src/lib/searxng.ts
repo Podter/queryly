@@ -3,8 +3,8 @@ import { SEARXNG_API, SECRET } from "astro:env/server";
 import { objectHash } from "ohash";
 import { SearxngService } from "searxng";
 
-import { cache } from "./cache";
 import { pick } from "./object-utils";
+import { cache } from "./redis";
 
 export const searxng = new SearxngService({
   baseURL: SEARXNG_API,

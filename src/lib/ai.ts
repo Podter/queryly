@@ -8,7 +8,7 @@ import { simulateReadableStream } from "ai";
 import { GROQ_API_KEY } from "astro:env/server";
 import { objectHash } from "ohash";
 
-import { redis } from "./cache";
+import { redis } from "./redis";
 
 export const groq = createGroq({
   apiKey: GROQ_API_KEY,

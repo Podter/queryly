@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { SEARXNG_API } from "astro:env/server";
 
-import { cache } from "~/lib/cache";
+import { cache } from "~/lib/redis";
 
 const CACHE_DAYS = 7;
 
