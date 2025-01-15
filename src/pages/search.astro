@@ -90,6 +90,25 @@ const end = performance.now();
                   set:html={content}
                 />
               </div>
+              <div class="flex flex-row-reverse justify-between text-xs text-muted-foreground">
+                <div class="flex gap-2">
+                  {result.engines.map((engine) => (
+                    <span>{engine}</span>
+                  ))}
+                </div>
+                {result.publishedDate && (
+                  <time datetime={result.publishedDate.toString()}>
+                    {new Date(result.publishedDate).toLocaleDateString(
+                      undefined,
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
+                  </time>
+                )}
+              </div>
             </article>
           );
         })
