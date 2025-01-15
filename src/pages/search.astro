@@ -1,10 +1,19 @@
 ---
+import { SearchIcon } from "lucide-react";
+
 import SearchInput from "~/components/search-input.astro";
+import { buttonVariants } from "~/components/ui/button";
+import { Separator } from "~/components/ui/separator";
 import Layout from "~/layouts/layout.astro";
 import { search } from "~/lib/searxng";
+import { cn } from "~/lib/utils";
+
+const start = performance.now();
 
 const query = Astro.url.searchParams.get("q") ?? "";
 const res = await search(query);
+
+const end = performance.now();
 ---
 
 <Layout>
@@ -15,23 +24,68 @@ const res = await search(query);
           Queryly
         </a>
       </div>
-      <div class="flex w-full max-w-[40rem]">
+      <div class="flex w-full max-w-screen-sm">
         <SearchInput initialQuery={query} />
       </div>
-      <div class="col-start-2 flex items-end">
+      <nav class="col-start-2 flex items-end">
         <p class="border-b-2 border-foreground">General</p>
-      </div>
+      </nav>
     </div>
   </header>
-  <main class="flex flex-1 flex-col space-y-6 py-8 pl-40">
-    {
-      res.results.map((result) => (
-        <a href={result.url} class="max-w-screen-2xl">
-          <span>{result.title}</span>
-          <p>{result.content}</p>
-        </a>
-      ))
-    }
+  <main class="flex flex-1 py-8 pl-40">
+    <div class="flex max-w-screen-sm flex-col space-y-6 break-words">
+      {
+        res.results.map((result) => (
+          <article class="flex flex-col space-y-1">
+            <a href={result.url} class="text-xs text-muted-foreground">
+              {result.url}
+            </a>
+            <a href={result.url} class="text-lg font-medium">
+              {result.title}
+            </a>
+            <p class="text-sm">{result.content}</p>
+          </article>
+        ))
+      }
+      {
+        res.suggestions.length > 0 && (
+          <>
+            <Separator />
+            <div class="flex flex-col space-y-3">
+              <span class="text-lg font-medium">Suggestions</span>
+              <div class="grid grid-cols-2 gap-2">
+                {res.suggestions.map((suggestion) => {
+                  const params = Astro.url.searchParams;
+                  params.set("q", suggestion);
+                  const url = `/search?${params.toString()}`;
+                  return (
+                    <a
+                      href={url}
+                      class={cn(
+                        buttonVariants({
+                          variant: "outline",
+                          className:
+                            "justify-between rounded-md px-3 py-3 font-normal",
+                        })
+                      )}
+                    >
+                      {suggestion}
+                      <SearchIcon className="text-muted-foreground" />
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )
+      }
+      <p class="text-sm text-muted-foreground">
+        Took {Math.round(end - start)}ms to fetch results
+      </p>
+    </div>
+    <div>
+      <!-- Infobox -->
+    </div>
   </main>
-  <div class="w-full border-b"></div>
+  <Separator />
 </Layout>

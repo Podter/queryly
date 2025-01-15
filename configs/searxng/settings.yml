@@ -12,8 +12,9 @@ ui:
 
 search:
   safe_search: 0
-  autocomplete: ""
   default_lang: ""
+  autocomplete: "google"
+  favicon_resolver: "google"
   formats:
     - html
     - json
