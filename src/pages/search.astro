@@ -3,14 +3,7 @@ import { SearchIcon } from "lucide-react";
 
 import SearchInput from "~/components/search-input.astro";
 import { buttonVariants } from "~/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Separator } from "~/components/ui/separator";
 import Layout from "~/layouts/layout.astro";
 import { getFaviconUrl, search } from "~/lib/searxng";
@@ -60,17 +53,21 @@ const end = performance.now();
             <a
               href={result.url}
               rel="noreferrer"
-              class="flex flex-col space-y-1"
+              class="flex flex-col space-y-1 text-blue-600 visited:text-purple-600 dark:text-blue-300 dark:visited:text-purple-300"
             >
-              <div class="flex items-center space-x-2">
+              <div class="group flex items-center space-x-2">
                 <img
                   src={getFaviconUrl(new URL(result.url).hostname)}
                   alt=""
                   class="h-4 w-4 rounded-sm"
                 />
-                <span class="text-xs text-muted-foreground">{result.url}</span>
+                <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
+                  {result.url}
+                </span>
               </div>
-              <h3 class="text-lg font-medium">{result.title}</h3>
+              <h3 class="text-lg font-medium underline-offset-4 hover:underline">
+                {result.title}
+              </h3>
             </a>
             <div class="flex space-x-2">
               {result.thumbnail && (
@@ -146,7 +143,12 @@ const end = performance.now();
                       <ul class="ml-6 list-disc space-y-1">
                         {urls.map(({ title, url }) => (
                           <li>
-                            <a href={url}>{title}</a>
+                            <a
+                              href={url}
+                              class="text-blue-600 underline-offset-4 visited:text-purple-600 hover:underline dark:text-blue-300 dark:visited:text-purple-300"
+                            >
+                              {title}
+                            </a>
                           </li>
                         ))}
                       </ul>
