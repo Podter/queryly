@@ -42,6 +42,5 @@ export default defineConfig({
         access: "secret",
       }),
     },
-    validateSecrets: true,
   },
 });
