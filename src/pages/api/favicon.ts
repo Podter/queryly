@@ -14,14 +14,27 @@ const getFavicon = cache(
     const url = SEARXNG_API + `/favicon_proxy?${params.toString()}`;
     const response = await fetch(url);
 
-    return response;
+    return {
+      response: {
+        ok: response.ok,
+        status: response.status,
+        statusText: response.statusText,
+      },
+      body: await response.arrayBuffer(),
+      type: response.headers.get("Content-Type") ?? "image/png",
+    };
   },
   (authority, hash) => `favicon:${authority}:${hash}`,
-  CACHE_DAYS * 86400,
+  {
+    ttl: CACHE_DAYS * 86400,
+    shouldCache(result) {
+      return result.response.ok;
+    },
+  },
 );
 
 export const GET: APIRoute = async ({ url }) => {
-  const response = await getFavicon(
+  const { response, body, type } = await getFavicon(
     url.searchParams.get("a") ?? "",
     url.searchParams.get("h") ?? "",
   );
@@ -33,9 +46,9 @@ export const GET: APIRoute = async ({ url }) => {
     });
   }
 
-  return new Response(response.body, {
+  return new Response(body, {
     headers: {
-      "Content-Type": response.headers.get("Content-Type") ?? "image/png",
+      "Content-Type": type,
       "Cache-Control": `public, max-age=${CACHE_DAYS * 86400}`,
     },
   });

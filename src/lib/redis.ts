@@ -11,7 +11,10 @@ type Callback = (...args: any[]) => Promise<any>;
 export function cache<T extends Callback>(
   callback: T,
   key: string | ((...args: Parameters<T>) => string),
-  ttl?: number, // seconds
+  opts?: {
+    ttl?: number; // seconds
+    shouldCache?: (result: Awaited<ReturnType<T>>) => boolean;
+  },
 ): T {
   async function cachedCallback(...args: Parameters<typeof callback>) {
     const cacheKey = typeof key === "function" ? key(...args) : key;
@@ -26,9 +29,20 @@ export function cache<T extends Callback>(
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const data = await callback(...args);
-    await redis.set(cacheKey, serialize(data));
-    if (ttl) {
-      await redis.expire(cacheKey, ttl);
+    async function commit() {
+      await redis.set(cacheKey, serialize(data));
+      if (opts?.ttl) {
+        await redis.expire(cacheKey, opts.ttl);
+      }
+    }
+
+    if (opts?.shouldCache) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      if (opts.shouldCache(data)) {
+        await commit();
+      }
+    } else {
+      await commit();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return

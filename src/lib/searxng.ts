@@ -20,7 +20,9 @@ export const search = cache(
     return await searxng.search(...args);
   },
   (...args) => `search:${objectHash(args)}`,
-  3600, // 1 hour
+  {
+    ttl: 3600, // 1 hour
+  },
 );
 
 export function getFaviconUrl(authority: string) {
