@@ -32,5 +32,9 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     stopSequences: ["</summary>"],
   });
 
-  return result.toDataStreamResponse();
+  return result.toDataStreamResponse({
+    headers: {
+      "Content-Type": "text/event-stream",
+    },
+  });
 };
