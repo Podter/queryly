@@ -3,3 +3,4 @@ yarn.lock
 pnpm-lock.yaml
 
 public/*
+README.md
