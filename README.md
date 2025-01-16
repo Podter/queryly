@@ -1,6 +1,6 @@
 # Queryly
 
-SearXNG wrapper with AI. Built with Astro, React, and Vercel AI SDK.
+Search engine with AI-powered search results. Built with Astro, React, Vercel AI SDK, and SearXNG.
 
 ![Queryly search results page](docs/search-results.png)
 

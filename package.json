@@ -1,6 +1,6 @@
 {
   "name": "queryly",
-  "description": "SearXNG wrapper with AI",
+  "description": "Search engine with AI-powered search results",
   "license": "MIT",
   "author": "Podter",
   "type": "module",
