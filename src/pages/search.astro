@@ -1,5 +1,5 @@
 ---
-import { SearchIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon, SearchIcon } from "lucide-react";
 
 import AIOverviews from "~/components/ai-overviews";
 import ScrollToTop from "~/components/scroll-to-top.astro";
@@ -19,6 +19,18 @@ const pageNum = Number(Astro.url.searchParams.get("p") ?? "1");
 const { results, suggestions, infoboxes } = await search(query, {
   pageno: pageNum,
 });
+
+function prevPage() {
+  const params = new URLSearchParams(Astro.url.searchParams);
+  params.set("p", Math.max(1, pageNum - 1).toString());
+  return `/search?${params.toString()}`;
+}
+
+function nextPage() {
+  const params = new URLSearchParams(Astro.url.searchParams);
+  params.set("p", (pageNum + 1).toString());
+  return `/search?${params.toString()}`;
+}
 
 type Infobox = Awaited<ReturnType<typeof search>>["infoboxes"][number] & {
   img_src?: string;
@@ -130,7 +142,7 @@ const end = performance.now();
                 <span class="text-lg font-medium">Suggestions</span>
                 <div class="grid grid-cols-2 gap-2">
                   {suggestions.map((suggestion) => {
-                    const params = Astro.url.searchParams;
+                    const params = new URLSearchParams(Astro.url.searchParams);
                     params.set("q", suggestion);
                     const url = `/search?${params.toString()}`;
                     return (
@@ -154,6 +166,55 @@ const end = performance.now();
             </>
           )
         }
+        <div class="flex w-full justify-center space-x-2">
+          {
+            pageNum > 1 && (
+              <a
+                href={prevPage()}
+                class={cn(
+                  buttonVariants({
+                    variant: "ghost",
+                    size: "icon",
+                  })
+                )}
+              >
+                <ChevronLeftIcon />
+              </a>
+            )
+          }
+          {
+            Array.from({ length: 10 }, (_, i) => {
+              const page = Math.max(1, pageNum - 4) + i;
+              const params = new URLSearchParams(Astro.url.searchParams);
+              params.set("p", page.toString());
+              const url = `/search?${params.toString()}`;
+              return (
+                <a
+                  href={url}
+                  class={cn(
+                    buttonVariants({
+                      variant: page === pageNum ? "secondary" : "outline",
+                      size: "icon",
+                    })
+                  )}
+                >
+                  {page}
+                </a>
+              );
+            })
+          }
+          <a
+            href={nextPage()}
+            class={cn(
+              buttonVariants({
+                variant: "ghost",
+                size: "icon",
+              })
+            )}
+          >
+            <ChevronRightIcon />
+          </a>
+        </div>
         <p class="text-xs text-muted-foreground">
           Took {Math.round(end - start)}ms to fetch results
         </p>
