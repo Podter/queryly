@@ -34,11 +34,15 @@ const getFavicon = cache(
 );
 
 export const GET: APIRoute = async ({ url }) => {
-  const { response, body, type } = await getFavicon(
-    url.searchParams.get("a") ?? "",
-    url.searchParams.get("h") ?? "",
-  );
+  const authority = url.searchParams.get("a");
+  const hash = url.searchParams.get("h");
+  if (!authority || !hash) {
+    return new Response(null, {
+      status: 400,
+    });
+  }
 
+  const { response, body, type } = await getFavicon(authority, hash);
   if (!response.ok) {
     return new Response(null, {
       status: response.status,
