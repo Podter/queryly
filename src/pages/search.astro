@@ -3,7 +3,7 @@ import { SearchIcon } from "lucide-react";
 
 import AIOverviews from "~/components/ai-overviews";
 import ScrollToTop from "~/components/scroll-to-top.astro";
-import SearchInput from "~/components/search-input.astro";
+import SearchInput from "~/components/search-input";
 import ThemeToggle from "~/components/theme-toggle.astro";
 import { buttonVariants } from "~/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
@@ -50,7 +50,7 @@ const end = performance.now();
         </a>
       </div>
       <div class="flex w-full max-w-screen-sm">
-        <SearchInput initialQuery={query} />
+        <SearchInput initialQuery={query} client:load />
       </div>
       <nav class="col-start-2 flex items-end">
         <p class="border-b-2 border-foreground">General</p>
@@ -113,7 +113,7 @@ const end = performance.now();
                           year: "numeric",
                           month: "long",
                           day: "numeric",
-                        },
+                        }
                       )}
                     </time>
                   )}
@@ -141,7 +141,7 @@ const end = performance.now();
                             variant: "outline",
                             className:
                               "justify-between rounded-md px-3 py-3 font-normal",
-                          }),
+                          })
                         )}
                       >
                         {suggestion}
@@ -200,7 +200,7 @@ const end = performance.now();
                     )}
                   </CardContent>
                 </Card>
-              ),
+              )
             )}
           </div>
         )

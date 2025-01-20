@@ -1,5 +1,5 @@
 ---
-import SearchInput from "~/components/search-input.astro";
+import SearchInput from "~/components/search-input";
 import ThemeToggle from "~/components/theme-toggle.astro";
 import Layout from "~/layouts/layout.astro";
 
@@ -16,7 +16,7 @@ export const prerender = true;
       Queryly
     </h1>
     <div class="w-full max-w-screen-sm px-6">
-      <SearchInput />
+      <SearchInput client:load />
     </div>
   </main>
 </Layout>

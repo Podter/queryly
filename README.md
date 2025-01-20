@@ -18,7 +18,7 @@ Search engine with AI-powered search results. Built with Astro, React, Vercel AI
 - [ ] Categories for search results
 - [ ] User settings
 - [ ] Responsive UI
-- [ ] Search suggestions
+- [/] Search suggestions
 
 ## Getting started
 
