@@ -183,8 +183,10 @@ const end = performance.now();
                   <div class="group flex items-center space-x-2">
                     <img
                       src={getFaviconUrl(new URL(result.url).hostname)}
-                      alt=""
+                      alt={new URL(result.url).hostname}
                       class="h-4 w-4 rounded-sm"
+                      loading="lazy"
+                      decoding="async"
                     />
                     <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
                       {result.url}
@@ -200,6 +202,8 @@ const end = performance.now();
                       src={result.thumbnail}
                       alt={result.title}
                       class="h-full max-h-32 max-w-48"
+                      loading="lazy"
+                      decoding="async"
                     />
                   )}
                   <p
@@ -323,7 +327,14 @@ const end = performance.now();
                 <Card>
                   <CardHeader className="space-y-4">
                     <CardTitle>{infobox}</CardTitle>
-                    {img_src && <img src={img_src} alt={infobox} />}
+                    {img_src && (
+                      <img
+                        src={img_src}
+                        alt={infobox}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
                   </CardHeader>
                   <CardContent className="prose prose-sm prose-neutral dark:prose-invert">
                     <p>{content}</p>
