@@ -14,11 +14,11 @@ Search engine with AI-powered search results. Built with Astro, React, Vercel AI
 
 ## Todo
 
-- [/] Pagination for search results
+- [x] Pagination for search results
 - [ ] Categories for search results
 - [ ] User settings
 - [ ] Responsive UI
-- [/] Search suggestions
+- [x] Search suggestions
 
 ## Getting started
 
