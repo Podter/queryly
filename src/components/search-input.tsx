@@ -14,17 +14,21 @@ export default function SearchInput({ initialQuery }: SearchInputProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
-    if (query === "") {
-      setSuggestions([]);
-      return;
-    }
+    const debounced = setTimeout(async () => {
+      if (query === "") {
+        setSuggestions([]);
+        return;
+      }
 
-    fetch(`/api/autocomplete?q=${encodeURIComponent(query)}`).then(
-      async (res) => {
-        const data: string[] = await res.json();
-        setSuggestions(data);
-      },
-    );
+      const data: string[] = await fetch(
+        `/api/autocomplete?q=${encodeURIComponent(query)}`,
+      ).then((res) => res.json());
+      setSuggestions(data);
+    }, 50);
+
+    return () => {
+      clearTimeout(debounced);
+    };
   }, [query]);
 
   const formRef = useRef<HTMLFormElement>(null);
