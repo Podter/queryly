@@ -170,69 +170,81 @@ const end = performance.now();
           )
         }
         {
-          results.map((result) => {
-            const re = new RegExp(query, "gi");
-            const content = result.content?.replace(re, `<strong>$&</strong>`);
-            return (
-              <article class="flex flex-col space-y-1">
-                <a
-                  href={result.url}
-                  rel="noreferrer"
-                  class="flex flex-col space-y-1 text-blue-700 visited:text-purple-700 dark:text-blue-300 dark:visited:text-purple-300"
-                >
-                  <div class="group flex items-center space-x-2">
-                    <img
-                      src={getFaviconUrl(new URL(result.url).hostname)}
-                      alt={new URL(result.url).hostname}
-                      class="h-4 w-4 rounded-sm"
-                      loading="lazy"
-                      decoding="async"
+          results.length > 0 ? (
+            results.map((result) => {
+              const re = new RegExp(query, "gi");
+              const content = result.content?.replace(
+                re,
+                `<strong>$&</strong>`
+              );
+              return (
+                <article class="flex flex-col space-y-1">
+                  <a
+                    href={result.url}
+                    rel="noreferrer"
+                    class="flex flex-col space-y-1 text-blue-700 visited:text-purple-700 dark:text-blue-300 dark:visited:text-purple-300"
+                  >
+                    <div class="group flex items-center space-x-2">
+                      <img
+                        src={getFaviconUrl(new URL(result.url).hostname)}
+                        alt={new URL(result.url).hostname}
+                        class="h-4 w-4 rounded-sm"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                      <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
+                        {result.url}
+                      </span>
+                    </div>
+                    <h3 class="text-lg font-medium underline-offset-4 hover:underline">
+                      {result.title}
+                    </h3>
+                  </a>
+                  <div class="flex space-x-2">
+                    {result.thumbnail && (
+                      <img
+                        src={result.thumbnail}
+                        alt={result.title}
+                        class="h-full max-h-32 max-w-48"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
+                    <p
+                      class="max-w-screen-sm break-words text-sm text-neutral-700 dark:text-neutral-300"
+                      set:html={content}
                     />
-                    <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
-                      {result.url}
-                    </span>
                   </div>
-                  <h3 class="text-lg font-medium underline-offset-4 hover:underline">
-                    {result.title}
-                  </h3>
-                </a>
-                <div class="flex space-x-2">
-                  {result.thumbnail && (
-                    <img
-                      src={result.thumbnail}
-                      alt={result.title}
-                      class="h-full max-h-32 max-w-48"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  )}
-                  <p
-                    class="max-w-screen-sm break-words text-sm text-neutral-700 dark:text-neutral-300"
-                    set:html={content}
-                  />
-                </div>
-                <div class="flex flex-row-reverse justify-between text-xs text-muted-foreground">
-                  <div class="flex gap-2">
-                    {result.engines.map((engine) => (
-                      <span>{engine}</span>
-                    ))}
+                  <div class="flex flex-row-reverse justify-between text-xs text-muted-foreground">
+                    <div class="flex gap-2">
+                      {result.engines.map((engine) => (
+                        <span>{engine}</span>
+                      ))}
+                    </div>
+                    {result.publishedDate && (
+                      <time datetime={result.publishedDate.toString()}>
+                        {new Date(result.publishedDate).toLocaleDateString(
+                          undefined,
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )}
+                      </time>
+                    )}
                   </div>
-                  {result.publishedDate && (
-                    <time datetime={result.publishedDate.toString()}>
-                      {new Date(result.publishedDate).toLocaleDateString(
-                        undefined,
-                        {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        }
-                      )}
-                    </time>
-                  )}
-                </div>
-              </article>
-            );
-          })
+                </article>
+              );
+            })
+          ) : (
+            <div class="flex flex-col items-center space-y-1">
+              <p class="text-lg font-medium">No results found</p>
+              <p class="text-muted-foreground">
+                Try searching for something else
+              </p>
+            </div>
+          )
         }
         {
           suggestions.length > 0 && (
