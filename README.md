@@ -15,7 +15,8 @@ Search engine with AI-powered search results. Built with Astro, React, Vercel AI
 ## Todo
 
 - [x] Pagination for search results
-- [ ] Categories for search results
+- [x] Categories for search results
+- [ ] Image search
 - [ ] User settings
 - [ ] Responsive UI
 - [x] Search suggestions

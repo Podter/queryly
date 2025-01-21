@@ -1,5 +1,20 @@
 ---
-import { ChevronLeftIcon, ChevronRightIcon, SearchIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import type { SearxngCategory } from "searxng";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  FilesIcon,
+  GraduationCap,
+  ImageIcon,
+  Layers,
+  MapPin,
+  Music,
+  Newspaper,
+  SearchIcon,
+  SquarePlay,
+  UsersRound,
+} from "lucide-react";
 
 import AIOverviews from "~/components/ai-overviews";
 import ScrollToTop from "~/components/scroll-to-top.astro";
@@ -12,12 +27,67 @@ import Layout from "~/layouts/layout.astro";
 import { getFaviconUrl, search } from "~/lib/searxng";
 import { cn } from "~/lib/utils";
 
+const CATEGORIES: Partial<
+  Record<
+    SearxngCategory,
+    {
+      label: string;
+      icon: LucideIcon;
+    }
+  >
+> = {
+  general: {
+    label: "General",
+    icon: SearchIcon,
+  },
+  images: {
+    label: "Images",
+    icon: ImageIcon,
+  },
+  videos: {
+    label: "Videos",
+    icon: SquarePlay,
+  },
+  news: {
+    label: "News",
+    icon: Newspaper,
+  },
+  map: {
+    label: "Map",
+    icon: MapPin,
+  },
+  music: {
+    label: "Music",
+    icon: Music,
+  },
+  it: {
+    label: "It",
+    icon: Layers,
+  },
+  science: {
+    label: "Science",
+    icon: GraduationCap,
+  },
+  files: {
+    label: "Files",
+    icon: FilesIcon,
+  },
+  social_media: {
+    label: "Social Media",
+    icon: UsersRound,
+  },
+};
+
 const start = performance.now();
 
 const query = Astro.url.searchParams.get("q") ?? "";
 const pageNum = Number(Astro.url.searchParams.get("p") ?? "1");
+const category =
+  (Astro.url.searchParams.get("category") as SearxngCategory | null) ??
+  "general";
 const { results, suggestions, infoboxes } = await search(query, {
   pageno: pageNum,
+  categories: [category],
 });
 
 function prevPage() {
@@ -64,15 +134,41 @@ const end = performance.now();
       <div class="flex w-full max-w-screen-sm">
         <SearchInput initialQuery={query} client:load />
       </div>
-      <nav class="col-start-2 flex items-end">
-        <p class="border-b-2 border-foreground">General</p>
+      <nav class="col-start-2 flex items-end space-x-4">
+        {
+          Object.entries(CATEGORIES).map(
+            ([categoryName, { label, icon: Icon }]) => {
+              const params = new URLSearchParams(Astro.url.searchParams);
+              params.set("category", categoryName);
+              const url = `/search?${params.toString()}`;
+              return (
+                <a
+                  href={url}
+                  class={cn(
+                    "inline-flex items-center gap-1 border-b-2 pb-0.5 text-sm",
+                    category === categoryName
+                      ? "border-foreground"
+                      : "border-transparent text-neutral-700 transition-colors hover:border-foreground hover:!text-foreground dark:text-neutral-300"
+                  )}
+                >
+                  <Icon size={14} />
+                  {label}
+                </a>
+              );
+            }
+          )
+        }
       </nav>
     </div>
   </header>
   <main class="flex flex-1 justify-between space-x-8 py-8 pl-40 pr-8">
     <div class="flex space-x-8">
       <div class="flex max-w-screen-sm flex-col space-y-6">
-        {pageNum === 1 && <AIOverviews {query} client:load />}
+        {
+          pageNum === 1 && category === "general" && (
+            <AIOverviews {query} client:load />
+          )
+        }
         {
           results.map((result) => {
             const re = new RegExp(query, "gi");
@@ -103,7 +199,7 @@ const end = performance.now();
                     <img
                       src={result.thumbnail}
                       alt={result.title}
-                      class="h-full"
+                      class="h-full max-h-32 max-w-48"
                     />
                   )}
                   <p
@@ -220,7 +316,7 @@ const end = performance.now();
         </p>
       </div>
       {
-        infoboxes.length > 0 && (
+        infoboxes.length > 0 && category === "general" && (
           <div class="flex max-w-96 flex-col space-y-6">
             {infoboxes.map(
               ({ infobox, content, img_src, attributes, urls }: Infobox) => (
