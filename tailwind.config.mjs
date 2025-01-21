@@ -1,5 +1,6 @@
 import typography from "@tailwindcss/typography";
 import svgToDataUri from "mini-svg-data-uri";
+import scrollbarHide from "tailwind-scrollbar-hide";
 import animate from "tailwindcss-animate";
 import { fontFamily } from "tailwindcss/defaultTheme";
 import flattenColorPalette from "tailwindcss/lib/util/flattenColorPalette";
@@ -56,7 +57,7 @@ export default {
       },
     },
   },
-  plugins: [animate, typography, backgroundGrid],
+  plugins: [animate, typography, backgroundGrid, scrollbarHide],
 };
 
 function backgroundGrid({ matchUtilities, theme }) {

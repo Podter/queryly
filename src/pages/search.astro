@@ -125,44 +125,57 @@ const end = performance.now();
     class="sticky top-0 z-50 border-b border-[#0a0a0a1a] bg-background/50 pt-6 backdrop-blur-md dark:border-[#e5e5e526]"
   >
     <ThemeToggle className="absolute right-3 top-3" />
-    <div class="grid grid-cols-[6rem_1fr] gap-6 pl-10">
-      <div class="flex items-center">
+    <div
+      class="grid grid-cols-1 gap-4 xl:grid-cols-[6rem_1fr] xl:gap-6 xl:px-8 xl:pl-10"
+    >
+      <div class="flex items-center justify-center">
         <a class="font-heading text-2xl font-semibold tracking-[-3%]" href="/">
           Queryly
         </a>
       </div>
-      <div class="flex w-full max-w-screen-sm">
-        <SearchInput initialQuery={query} client:load />
+      <div class="flex w-full justify-center px-8 xl:justify-start xl:px-0">
+        <div class="flex w-full max-w-screen-sm">
+          <SearchInput initialQuery={query} client:load />
+        </div>
       </div>
-      <nav class="col-start-2 flex items-end space-x-4">
-        {
-          Object.entries(CATEGORIES).map(
-            ([categoryName, { label, icon: Icon }]) => {
-              const params = new URLSearchParams(Astro.url.searchParams);
-              params.set("category", categoryName);
-              const url = `/search?${params.toString()}`;
-              return (
-                <a
-                  href={url}
-                  class={cn(
-                    "inline-flex items-center gap-1 border-b-2 pb-0.5 text-sm",
-                    category === categoryName
-                      ? "border-foreground"
-                      : "border-transparent text-neutral-700 transition-colors hover:border-foreground hover:!text-foreground dark:text-neutral-300"
-                  )}
-                >
-                  <Icon size={14} />
-                  {label}
-                </a>
-              );
-            }
-          )
-        }
-      </nav>
+      <div class="flex w-full justify-center xl:col-start-2 xl:justify-start">
+        <nav
+          class="flex items-end space-x-4 overflow-scroll px-8 scrollbar-hide xl:px-0"
+        >
+          {
+            Object.entries(CATEGORIES).map(
+              ([categoryName, { label, icon: Icon }]) => {
+                const params = new URLSearchParams(Astro.url.searchParams);
+                params.set("category", categoryName);
+                const url = `/search?${params.toString()}`;
+                return (
+                  <a
+                    href={url}
+                    class={cn(
+                      "inline-flex items-center gap-1 whitespace-nowrap border-b-2 pb-0.5 text-sm",
+                      category === categoryName
+                        ? "border-foreground"
+                        : "border-transparent text-neutral-700 transition-colors hover:border-foreground hover:!text-foreground dark:text-neutral-300"
+                    )}
+                  >
+                    <Icon size={14} />
+                    {label}
+                  </a>
+                );
+              }
+            )
+          }
+        </nav>
+      </div>
     </div>
   </header>
-  <main class="flex flex-1 justify-between space-x-8 py-8 pl-40 pr-8">
-    <div class="flex space-x-8">
+  <main
+    class="flex flex-1 justify-center space-x-8 py-8 pl-8 pr-8 xl:justify-between xl:pl-40"
+  >
+    <!-- TODO: fix the text overflow -->
+    <div
+      class="flex flex-col-reverse gap-6 overflow-hidden text-ellipsis xl:flex-row xl:gap-8"
+    >
       <div class="flex max-w-screen-sm flex-col space-y-6">
         {
           pageNum === 1 && category === "general" && (
@@ -192,7 +205,7 @@ const end = performance.now();
                         loading="lazy"
                         decoding="async"
                       />
-                      <span class="text-xs text-muted-foreground underline-offset-4 group-hover:underline">
+                      <span class="break-all text-xs text-muted-foreground underline-offset-4 group-hover:underline">
                         {result.url}
                       </span>
                     </div>
@@ -268,7 +281,9 @@ const end = performance.now();
                           })
                         )}
                       >
-                        {suggestion}
+                        <span class="overflow-hidden text-ellipsis">
+                          {suggestion}
+                        </span>
                         <SearchIcon className="text-muted-foreground" />
                       </a>
                     );
@@ -296,7 +311,7 @@ const end = performance.now();
           }
           {
             Array.from({ length: 10 }, (_, i) => {
-              const page = Math.max(1, pageNum - 4) + i;
+              const page = Math.max(1, pageNum - 3) + i;
               const params = new URLSearchParams(Astro.url.searchParams);
               params.set("p", page.toString());
               const url = `/search?${params.toString()}`;
@@ -307,6 +322,7 @@ const end = performance.now();
                     buttonVariants({
                       variant: page === pageNum ? "secondary" : "outline",
                       size: "icon",
+                      className: i >= 5 ? "hidden xl:inline-flex" : "",
                     })
                   )}
                 >
@@ -333,7 +349,7 @@ const end = performance.now();
       </div>
       {
         infoboxes.length > 0 && category === "general" && (
-          <div class="flex max-w-96 flex-col space-y-6">
+          <div class="flex max-w-screen-sm flex-col space-y-6 xl:max-w-96">
             {infoboxes.map(
               ({ infobox, content, img_src, attributes, urls }: Infobox) => (
                 <Card>
@@ -386,7 +402,7 @@ const end = performance.now();
         )
       }
     </div>
-    <div class="relative flex">
+    <div class="relative hidden xl:flex">
       <ScrollToTop className="sticky top-[calc(100vh-2.5rem-2rem)]" />
     </div>
   </main>
