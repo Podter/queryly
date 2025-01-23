@@ -1,6 +1,6 @@
 ---
 import SearchInput from "~/components/search-input";
-import ThemeToggle from "~/components/theme-toggle.astro";
+import Settings from "~/components/settings";
 import Layout from "~/layouts/layout.astro";
 
 export const prerender = true;
@@ -10,7 +10,7 @@ export const prerender = true;
   title="Queryly"
   description="Search the web with Queryly. Search engine with AI-powered search results, powered by SearXNG."
 >
-  <ThemeToggle className="absolute right-3 top-3" />
+  <Settings className="absolute right-3 top-3" client:load />
   <main class="flex flex-1 flex-col items-center justify-center">
     <h1 class="mb-12 font-heading text-7xl font-semibold tracking-[-3%]">
       Queryly

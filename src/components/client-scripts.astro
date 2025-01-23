@@ -19,6 +19,9 @@ import { ClientRouter } from "astro:transitions";
 
   updateTheme();
   document.addEventListener("astro:after-swap", () => updateTheme());
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => updateTheme());
 
   if (typeof localStorage !== "undefined") {
     const observer = new MutationObserver(() => {

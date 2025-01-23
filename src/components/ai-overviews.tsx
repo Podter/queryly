@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 
 import { cn } from "~/lib/utils";
+import { AI_OVERVIEWS_KEY } from "./settings";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
@@ -22,6 +23,13 @@ export default function AIOverviews({ query }: AIOverviewsProps) {
     void complete(query);
   }, [complete, query]);
 
+  useEffect(() => {
+    const value = localStorage.getItem(AI_OVERVIEWS_KEY);
+    if (value) {
+      setOpen(value === "true");
+    }
+  }, []);
+
   return (
     <Card className="relative overflow-hidden">
       <CardHeader>
@@ -32,7 +40,7 @@ export default function AIOverviews({ query }: AIOverviewsProps) {
       </CardHeader>
       <CardContent
         className={cn(
-          "prose prose-sm prose-neutral max-w-none dark:prose-invert",
+          "prose prose-sm prose-neutral min-h-64 max-w-none dark:prose-invert",
           !open && "h-64",
         )}
       >
