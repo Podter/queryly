@@ -23,6 +23,7 @@
     "@astrojs/react": "^4.1.4",
     "@fontsource-variable/inter": "^5.1.1",
     "@fontsource/poppins": "^5.1.1",
+    "@radix-ui/react-dialog": "^1.1.5",
     "@radix-ui/react-separator": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.1",
     "@upstash/ratelimit": "^2.0.5",
