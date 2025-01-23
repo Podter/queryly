@@ -1,0 +1,12 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/" xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Queryly</ShortName>
+  <LongName>Queryly metasearch</LongName>
+  <Description>Queryly is a search engine with AI-powered search results, powered by SearXNG.</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image type="image/svg+xml">https://queryly.podter.me/favicon.svg</Image>
+  <Url rel="results" type="text/html" method="GET" template="https://queryly.podter.me/search?q={searchTerms}"/>
+  <Url rel="suggestions" type="application/x-suggestions+json" method="GET" template="https://queryly.podter.me/api/autocomplete?q={searchTerms}"/>
+  <Url rel="self" type="application/opensearchdescription+xml" method="GET" template="https://queryly.podter.me/opensearch.xml"/>
+  <Query role="example" searchTerms="Queryly"/>
+  <moz:SearchForm>https://queryly.podter.me/search</moz:SearchForm>
+</OpenSearchDescription>

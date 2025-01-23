@@ -24,6 +24,12 @@ const { title, description } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link
+      title="Queryly"
+      type="application/opensearchdescription+xml"
+      rel="search"
+      href="/opensearch.xml"
+    />
     <ClientScripts />
   </head>
   <body>
