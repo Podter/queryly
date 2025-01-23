@@ -155,14 +155,14 @@ const end = performance.now();
                       "inline-flex items-center gap-1 whitespace-nowrap border-b-2 pb-0.5 text-sm",
                       category === categoryName
                         ? "border-foreground"
-                        : "border-transparent text-neutral-700 transition-colors hover:border-foreground hover:!text-foreground dark:text-neutral-300"
+                        : "border-transparent text-neutral-700 transition-colors hover:border-foreground hover:!text-foreground dark:text-neutral-300",
                     )}
                   >
                     <Icon size={14} />
                     {label}
                   </a>
                 );
-              }
+              },
             )
           }
         </nav>
@@ -188,7 +188,7 @@ const end = performance.now();
               const re = new RegExp(query, "gi");
               const content = result.content?.replace(
                 re,
-                `<strong>$&</strong>`
+                `<strong>$&</strong>`,
               );
               return (
                 <article class="flex flex-col space-y-1">
@@ -242,7 +242,7 @@ const end = performance.now();
                             year: "numeric",
                             month: "long",
                             day: "numeric",
-                          }
+                          },
                         )}
                       </time>
                     )}
@@ -278,7 +278,7 @@ const end = performance.now();
                             variant: "outline",
                             className:
                               "justify-between rounded-md px-3 py-3 font-normal",
-                          })
+                          }),
                         )}
                       >
                         <span class="overflow-hidden text-ellipsis">
@@ -302,7 +302,7 @@ const end = performance.now();
                   buttonVariants({
                     variant: "ghost",
                     size: "icon",
-                  })
+                  }),
                 )}
               >
                 <ChevronLeftIcon />
@@ -323,7 +323,7 @@ const end = performance.now();
                       variant: page === pageNum ? "secondary" : "outline",
                       size: "icon",
                       className: i >= 5 ? "hidden xl:inline-flex" : "",
-                    })
+                    }),
                   )}
                 >
                   {page}
@@ -337,7 +337,7 @@ const end = performance.now();
               buttonVariants({
                 variant: "ghost",
                 size: "icon",
-              })
+              }),
             )}
           >
             <ChevronRightIcon />
@@ -396,7 +396,7 @@ const end = performance.now();
                     )}
                   </CardContent>
                 </Card>
-              )
+              ),
             )}
           </div>
         )
