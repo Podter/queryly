@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import AIOverviews from "~/components/ai-overviews";
+import ImageItem from "~/components/image-item";
 import ScrollToTop from "~/components/scroll-to-top.astro";
 import SearchInput from "~/components/search-input";
 import Settings from "~/components/settings";
@@ -40,10 +41,10 @@ const CATEGORIES: Partial<
     label: "General",
     icon: SearchIcon,
   },
-  // images: {
-  //   label: "Images",
-  //   icon: ImageIcon,
-  // },
+  images: {
+    label: "Images",
+    icon: ImageIcon,
+  },
   videos: {
     label: "Videos",
     icon: SquarePlay,
@@ -155,28 +156,34 @@ const end = performance.now();
                       "inline-flex items-center gap-1 whitespace-nowrap border-b-2 pb-0.5 text-sm",
                       category === categoryName
                         ? "border-foreground"
-                        : "border-transparent text-neutral-700 transition-colors hover:border-foreground hover:!text-foreground dark:text-neutral-300",
+                        : "border-transparent text-neutral-700 transition-colors hover:border-foreground hover:!text-foreground dark:text-neutral-300"
                     )}
                   >
                     <Icon size={14} />
                     {label}
                   </a>
                 );
-              },
+              }
             )
           }
         </nav>
       </div>
     </div>
   </header>
+
   <main
     class="flex flex-1 justify-center space-x-8 py-8 pl-8 pr-8 xl:justify-between xl:pl-40"
   >
-    <!-- TODO: fix the text overflow -->
+    {/* TODO: fix the text overflow */}
     <div
       class="flex flex-col-reverse gap-6 overflow-hidden text-ellipsis xl:flex-row xl:gap-8"
     >
-      <div class="flex max-w-screen-sm flex-col space-y-6">
+      <div
+        class={cn(
+          "flex flex-col space-y-6",
+          category !== "images" && "max-w-screen-sm"
+        )}
+      >
         {
           pageNum === 1 && category === "general" && (
             <AIOverviews {query} client:load />
@@ -184,72 +191,82 @@ const end = performance.now();
         }
         {
           results.length > 0 ? (
-            results.map((result) => {
-              const re = new RegExp(query, "gi");
-              const content = result.content?.replace(
-                re,
-                `<strong>$&</strong>`,
-              );
-              return (
-                <article class="flex flex-col space-y-1">
-                  <a
-                    href={result.url}
-                    rel="noreferrer"
-                    class="flex flex-col space-y-1 text-blue-700 visited:text-purple-700 dark:text-blue-300 dark:visited:text-purple-300"
-                  >
-                    <div class="group flex items-center space-x-2">
-                      <img
-                        src={getFaviconUrl(new URL(result.url).hostname)}
-                        alt={new URL(result.url).hostname}
-                        class="h-4 w-4 rounded-sm"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                      <span class="break-all text-xs text-muted-foreground underline-offset-4 group-hover:underline">
-                        {result.url}
-                      </span>
-                    </div>
-                    <h3 class="text-lg font-medium underline-offset-4 hover:underline">
-                      {result.title}
-                    </h3>
-                  </a>
-                  <div class="flex space-x-2">
-                    {result.thumbnail && (
-                      <img
-                        src={result.thumbnail}
-                        alt={result.title}
-                        class="h-full max-h-32 max-w-48"
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    )}
-                    <p
-                      class="max-w-screen-sm break-words text-sm text-neutral-700 dark:text-neutral-300"
-                      set:html={content}
-                    />
-                  </div>
-                  <div class="flex flex-row-reverse justify-between text-xs text-muted-foreground">
-                    <div class="flex gap-2">
-                      {result.engines.map((engine) => (
-                        <span>{engine}</span>
-                      ))}
-                    </div>
-                    {result.publishedDate && (
-                      <time datetime={result.publishedDate.toString()}>
-                        {new Date(result.publishedDate).toLocaleDateString(
-                          undefined,
-                          {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          },
+            <>
+              {category !== "images" ? (
+                results.map((result) => {
+                  const re = new RegExp(query, "gi");
+                  const content = result.content?.replace(
+                    re,
+                    `<strong>$&</strong>`
+                  );
+                  return (
+                    <article class="flex flex-col space-y-1">
+                      <a
+                        href={result.url}
+                        rel="noreferrer"
+                        class="flex flex-col space-y-1 text-blue-700 visited:text-purple-700 dark:text-blue-300 dark:visited:text-purple-300"
+                      >
+                        <div class="group flex items-center space-x-2">
+                          <img
+                            src={getFaviconUrl(new URL(result.url).hostname)}
+                            alt={new URL(result.url).hostname}
+                            class="h-4 w-4 rounded-sm"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                          <span class="break-all text-xs text-muted-foreground underline-offset-4 group-hover:underline">
+                            {result.url}
+                          </span>
+                        </div>
+                        <h3 class="text-lg font-medium underline-offset-4 hover:underline">
+                          {result.title}
+                        </h3>
+                      </a>
+                      <div class="flex space-x-2">
+                        {result.thumbnail && (
+                          <img
+                            src={result.thumbnail}
+                            alt={result.title}
+                            class="h-full max-h-32 max-w-48"
+                            loading="lazy"
+                            decoding="async"
+                          />
                         )}
-                      </time>
-                    )}
-                  </div>
-                </article>
-              );
-            })
+                        <p
+                          class="max-w-screen-sm break-words text-sm text-neutral-700 dark:text-neutral-300"
+                          set:html={content}
+                        />
+                      </div>
+                      <div class="flex flex-row-reverse justify-between text-xs text-muted-foreground">
+                        <div class="flex gap-2">
+                          {result.engines.map((engine) => (
+                            <span>{engine}</span>
+                          ))}
+                        </div>
+                        {result.publishedDate && (
+                          <time datetime={result.publishedDate.toString()}>
+                            {new Date(result.publishedDate).toLocaleDateString(
+                              undefined,
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                              }
+                            )}
+                          </time>
+                        )}
+                      </div>
+                    </article>
+                  );
+                })
+              ) : (
+                <div class="grid grid-cols-2 gap-4 md:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-8">
+                  {results.map((result) => {
+                    return <ImageItem data={result} client:visible />;
+                  })}
+                </div>
+              )}
+            </>
           ) : (
             <div class="flex flex-col items-center space-y-1">
               <p class="text-lg font-medium">No results found</p>
@@ -278,7 +295,7 @@ const end = performance.now();
                             variant: "outline",
                             className:
                               "justify-between rounded-md px-3 py-3 font-normal",
-                          }),
+                          })
                         )}
                       >
                         <span class="overflow-hidden text-ellipsis">
@@ -302,7 +319,7 @@ const end = performance.now();
                   buttonVariants({
                     variant: "ghost",
                     size: "icon",
-                  }),
+                  })
                 )}
               >
                 <ChevronLeftIcon />
@@ -323,7 +340,7 @@ const end = performance.now();
                       variant: page === pageNum ? "secondary" : "outline",
                       size: "icon",
                       className: i >= 5 ? "hidden xl:inline-flex" : "",
-                    }),
+                    })
                   )}
                 >
                   {page}
@@ -337,7 +354,7 @@ const end = performance.now();
               buttonVariants({
                 variant: "ghost",
                 size: "icon",
-              }),
+              })
             )}
           >
             <ChevronRightIcon />
@@ -396,7 +413,7 @@ const end = performance.now();
                     )}
                   </CardContent>
                 </Card>
-              ),
+              )
             )}
           </div>
         )
