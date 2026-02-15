@@ -12,16 +12,15 @@ import { ClientRouter } from "astro:transitions";
       : "light";
   }
 
-  function updateTheme() {
+  function updateTheme(doc = document) {
     const isDark = getTheme() === "dark";
-    document.documentElement.classList[isDark ? "add" : "remove"]("dark");
+    doc.documentElement.classList[isDark ? "add" : "remove"]("dark");
   }
 
   updateTheme();
-  document.addEventListener("astro:after-swap", () => updateTheme());
-  window
-    .matchMedia("(prefers-color-scheme: dark)")
-    .addEventListener("change", () => updateTheme());
+  document.addEventListener("astro:before-swap", (e) =>
+    updateTheme(e.newDocument),
+  );
 
   if (typeof localStorage !== "undefined") {
     const observer = new MutationObserver(() => {
@@ -36,16 +35,16 @@ import { ClientRouter } from "astro:transitions";
 </script>
 
 <script>
-  import { NProgress } from "nprogress-v2";
+  import { BProgress } from "@bprogress/core";
 
-  NProgress.configure({ showSpinner: false });
+  BProgress.configure({ showSpinner: false });
 
   document.addEventListener("astro:before-preparation", () => {
-    NProgress.start();
+    BProgress.start();
   });
 
   document.addEventListener("astro:after-swap", () => {
-    NProgress.done();
+    BProgress.done();
   });
 </script>
 

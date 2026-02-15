@@ -1,12 +1,12 @@
 import { deserialize, serialize } from "node:v8";
 import type {
-  Experimental_LanguageModelV1Middleware as LanguageModelV1Middleware,
-  LanguageModelV1StreamPart,
-} from "ai";
+  LanguageModelV3Middleware,
+  LanguageModelV3StreamPart,
+} from "@ai-sdk/provider";
 import { createGroq } from "@ai-sdk/groq";
 import { simulateReadableStream } from "ai";
 import { GROQ_API_KEY } from "astro:env/server";
-import { objectHash } from "ohash";
+import { serialize as objectHash } from "ohash";
 
 import { limiter, redis } from "./redis";
 
@@ -16,7 +16,8 @@ export const groq = createGroq({
 
 export const cacheMiddleware = (
   clientAddress: string,
-): LanguageModelV1Middleware => ({
+): LanguageModelV3Middleware => ({
+  specificationVersion: "v3",
   wrapStream: async ({ doStream, params }) => {
     const cacheKey = `ai:${objectHash(params)}`;
 
@@ -27,7 +28,7 @@ export const cacheMiddleware = (
     if (cached !== null) {
       // Format the timestamps in the cached response
       const formattedChunks = (
-        deserialize(cached) as LanguageModelV1StreamPart[]
+        deserialize(cached) as LanguageModelV3StreamPart[]
       ).map((p) => {
         if (p.type === "response-metadata" && p.timestamp) {
           return { ...p, timestamp: new Date(p.timestamp) };
@@ -50,11 +51,11 @@ export const cacheMiddleware = (
 
     const { stream, ...rest } = await doStream();
 
-    const fullResponse: LanguageModelV1StreamPart[] = [];
+    const fullResponse: LanguageModelV3StreamPart[] = [];
 
     const transformStream = new TransformStream<
-      LanguageModelV1StreamPart,
-      LanguageModelV1StreamPart
+      LanguageModelV3StreamPart,
+      LanguageModelV3StreamPart
     >({
       transform(chunk, controller) {
         fullResponse.push(chunk);

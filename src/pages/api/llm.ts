@@ -1,8 +1,5 @@
 import type { APIRoute } from "astro";
-import {
-  streamText,
-  experimental_wrapLanguageModel as wrapLanguageModel,
-} from "ai";
+import { streamText, wrapLanguageModel } from "ai";
 
 import { cacheMiddleware, groq } from "~/lib/ai";
 import systemPrompt from "~/lib/prompt.txt?raw";
@@ -14,27 +11,19 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
 
   const result = streamText({
     model: wrapLanguageModel({
-      model: groq("llama-3.1-8b-instant"),
+      model: groq("meta-llama/llama-4-scout-17b-16e-instruct"),
       middleware: cacheMiddleware(clientAddress),
     }),
-    maxTokens: 4096,
-    system: systemPrompt,
+    maxOutputTokens: 4096,
     messages: [
-      {
-        role: "user",
-        content: JSON.stringify(searchResult, null, 2),
-      },
-      {
-        role: "assistant",
-        content: "<summary>",
-      },
+      { role: "system", content: systemPrompt },
+      { role: "user", content: JSON.stringify(searchResult, null, 2) },
+      { role: "assistant", content: "<summary>" },
     ],
     stopSequences: ["</summary>"],
   });
 
-  return result.toDataStreamResponse({
-    headers: {
-      "Content-Type": "text/event-stream",
-    },
+  return result.toUIMessageStreamResponse({
+    headers: { "Content-Type": "text/event-stream" },
   });
 };

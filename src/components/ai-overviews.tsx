@@ -1,4 +1,4 @@
-import { useCompletion } from "ai/react";
+import { useCompletion } from "@ai-sdk/react";
 import { Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
@@ -26,6 +26,7 @@ export default function AIOverviews({ query }: AIOverviewsProps) {
   useEffect(() => {
     const value = localStorage.getItem(AI_OVERVIEWS_KEY);
     if (value) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setOpen(value === "true");
     }
   }, []);

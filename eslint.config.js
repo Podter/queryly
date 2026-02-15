@@ -6,10 +6,11 @@ import importPlugin from "eslint-plugin-import";
 import jsxA11y from "eslint-plugin-jsx-a11y";
 import reactCompiler from "eslint-plugin-react-compiler";
 import reactHooks from "eslint-plugin-react-hooks";
+import { defineConfig } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config(
+export default defineConfig(
   includeIgnoreFile(path.join(import.meta.dirname, ".gitignore")),
   { ignores: ["**/*.config.*", ".prettierrc.mjs", "public/*"] },
   eslint.configs.recommended,
@@ -43,9 +44,7 @@ export default tseslint.config(
       ],
       "@typescript-eslint/no-unnecessary-condition": [
         "error",
-        {
-          allowConstantLoopConditions: true,
-        },
+        { allowConstantLoopConditions: true },
       ],
       "@typescript-eslint/no-non-null-assertion": "error",
       "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
@@ -53,26 +52,17 @@ export default tseslint.config(
   },
   {
     files: ["**/*.astro"],
-    rules: {
-      "@typescript-eslint/no-unsafe-return": "off",
-    },
+    rules: { "@typescript-eslint/no-unsafe-return": "off" },
   },
   {
-    linterOptions: {
-      reportUnusedDisableDirectives: true,
-    },
+    linterOptions: { reportUnusedDisableDirectives: true },
     languageOptions: {
       parserOptions: {
         parser: tseslint.parser,
         project: true,
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaFeatures: { jsx: true },
       },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
+      globals: { ...globals.browser, ...globals.node },
     },
   },
 );

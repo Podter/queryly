@@ -14,12 +14,14 @@ export default function SearchInput({ initialQuery }: SearchInputProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     const debounced = setTimeout(async () => {
       if (query === "") {
         setSuggestions([]);
         return;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const data: string[] = await fetch(
         `/api/autocomplete?q=${encodeURIComponent(query)}`,
       ).then((res) => res.json());
@@ -47,6 +49,7 @@ export default function SearchInput({ initialQuery }: SearchInputProps) {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
+    // eslint-disable-next-line react-hooks/refs
   }, [formRef.current?.offsetWidth]);
 
   return (

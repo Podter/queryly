@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { SEARXNG_API, SECRET } from "astro:env/server";
-import { objectHash } from "ohash";
+import { serialize as objectHash } from "ohash";
 import { SearxngService } from "searxng";
 
 import { pick } from "./object-utils";

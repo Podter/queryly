@@ -6,7 +6,7 @@ Search engine with AI-powered search results. Built with Astro, React, Vercel AI
 
 ## Features
 
-- AI-powered search results with Llama 3.1 8b LLM (provided by Groq API)
+- AI-powered search results with Llama 4 Scout (provided by Groq API)
 - Search results from multiple search engines (provided by self-hosted SearXNG)
 - Search results and LLM responses caching with Redis
 - Rate limiting for LLM responses

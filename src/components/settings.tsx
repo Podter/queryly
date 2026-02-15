@@ -101,6 +101,7 @@ function ExpandAIOverviews() {
   useEffect(() => {
     const value = localStorage.getItem(AI_OVERVIEWS_KEY);
     if (value) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       _setOpen(value === "true");
     }
   }, []);

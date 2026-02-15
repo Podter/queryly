@@ -21,6 +21,7 @@ const getAutocomplete = cache(
         status: response.status,
         statusText: response.statusText,
       },
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       data: ((await response.json()) as AutocompleteResponse)[1] ?? [],
     };
   },
